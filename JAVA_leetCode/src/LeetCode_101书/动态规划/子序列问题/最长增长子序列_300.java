@@ -94,7 +94,6 @@ public class 最长增长子序列_300 {
                 dp[len] = nums[i];
                 len++;
             }else {
-                //pos用于确认应该替换的数据的位置
                 int low = 0; int high = len;
                 while(low < high){
                     int mid = low + (high - low)/2;
