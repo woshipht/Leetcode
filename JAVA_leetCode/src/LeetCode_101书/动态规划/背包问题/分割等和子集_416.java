@@ -21,7 +21,7 @@ public class 分割等和子集_416 {
     public static void main(String[] args){
         int[] nums = new int[]{1,2,3,6};
 
-        System.out.println(canPartition(nums));
+        System.out.println(canPartition2(nums));
     }
 
     /*想好用动态规划就想想动态规划五步曲!
@@ -53,7 +53,7 @@ public class 分割等和子集_416 {
 
     5.返回值:                        因为是需要放入所有数时，能否相加起来等于target，所以返回 dp[num.length-1][target]
      */
-    public static boolean canPartition(int[] nums) {
+    public static boolean canPartition1(int[] nums) {
         //当数组长度少于2，不可能平分成2个相同的数
         if(nums.length < 2) return false;
 
@@ -100,5 +100,34 @@ public class 分割等和子集_416 {
             }
         }
         return dp[nums.length-1][target];
+    }
+
+    public static boolean canPartition2(int[] nums) {
+        //当数组长度少于2，不可能平分成2个相同的数
+        if(nums.length < 2) return false;
+
+        int total = 0;
+        int max = 0;
+        for (int num : nums){
+            total += num;
+            max = Math.max(max,num);
+        }
+        //当所有数的和为奇数，不可能平分成2个相同的数
+        if(total % 2 == 1) return false;
+
+        //想要的目标数！
+        int target = total / 2;
+        //当数组中最大的数已经比 想要的目标数 还大，不可能平分成2个相同的数
+        if(max > target) return false;
+
+        boolean[] dp = new boolean[target+1];
+        dp[0] = true;
+        for(int i=1; i<=nums.length; i++){
+            for(int j=target; j>=nums[i-1] ; j--){
+                dp[j] = dp[j] || dp[j-nums[i-1]];
+            }
+        }
+
+        return dp[target];
     }
 }

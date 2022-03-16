@@ -30,7 +30,7 @@ public class 一和零_474 {
         int m=5;
         int n=7;
 
-        System.out.println(findMaxForm(strs,m,n));
+        System.out.println(findMaxForm1(strs,m,n));
     }
 /*想好用动态规划就想想动态规划五步曲!
     本题为背包问题！
@@ -72,11 +72,14 @@ public class 一和零_474 {
     5.返回值:                        因为是需要放入所有数时，能否相加起来等于target，所以返回 dp[num.length-1][m][n]
      */
 
-    public static int findMaxForm(String[] strs, int m, int n) {
+    public static int findMaxForm1(String[] strs, int m, int n) {
         if(strs.length==0) return 0;
 
+        //三维数组！
         int[][][] dp = new int[strs.length+1][m+1][n+1];
+
         for(int i=1; i<=strs.length; i++){
+            //num0：0的数量，num1：1的数量
             int num1 = numOfOne(strs[i-1]);
             int num0 = strs[i-1].length()-num1;
             System.out.println(num0+" "+num1);
@@ -93,13 +96,37 @@ public class 一和零_474 {
         return dp[strs.length][m][n];
     }
 
-    public static int numOfOne(String str){
-        int numOf1 = 0;
-        for (int i=0; i<str.length(); i++){
-            if(str.charAt(i) == '1'){
-                numOf1++;
+    public static int findMaxForm2(String[] strs, int m, int n) {
+        if (strs.length == 0) return 0;
+
+        int[][] dp = new int[m + 1][n + 1];
+
+        for (int i = 1; i <= strs.length; i++) {
+            //num0：0的数量，num1：1的数量
+            int num1 = numOfOne(strs[i - 1]);
+            int num0 = strs[i - 1].length() - num1;
+            System.out.println(num0 + " " + num1);
+            for (int j = m; j >= num0; j--) {
+                for (int k = n; k >= num1; k--) {
+                    if(num0 <= j && num1 <= k){
+                        dp[j][k] = Math.max(dp[j-num0][k-num1]+1,dp[j][k]);
+                    }else {
+                        dp[j][k] = dp[j][k];
+                    }
+                }
             }
+
         }
-        return numOf1;
+        return dp[m][n];
     }
+
+        public static int numOfOne (String str){
+            int numOf1 = 0;
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) == '1') {
+                    numOf1++;
+                }
+            }
+            return numOf1;
+        }
 }
